@@ -101,7 +101,7 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        
+
 
         return super.onTouchEvent(event);
     }
