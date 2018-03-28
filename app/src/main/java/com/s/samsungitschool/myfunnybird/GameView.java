@@ -1,5 +1,6 @@
 package com.s.samsungitschool.myfunnybird;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +12,6 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by Админ on 27.03.2018.
- */
 
 public class GameView extends View {
     // Размеры экрана w-ширина, h-высота
@@ -96,12 +94,52 @@ public class GameView extends View {
 
     public void update() {
         playerBird.update(timeInterval);
+        enemyBird.update(timeInterval);
+        // Метод, который не позволит птице игрока вылететь за пределы экрана
+        if (playerBird.getY() + playerBird.getFrameHeight() > viewHeight) {
+            playerBird.setVelocityY( -playerBird.getVelocityY() );
+            points--;
+        } else if (playerBird.getY() < 0) {
+            playerBird.setVelocityY( -playerBird.getVelocityY() );
+        }
+
+        // Проверка пролета птицы противника
+        if (enemyBird.getX() < -enemyBird.getFrameWidth()) {
+            teleportEnemy();
+            points += 10;
+        }
+
+        // Проверка столкновений
+        if (enemyBird.intersect(playerBird)) {
+            teleportEnemy();
+            points -= 40;
+        }
+
         invalidate();
     }
 
+    // Метод возвращения птицы противника после пролета
+    public void teleportEnemy() {
+        enemyBird.setX(viewWidth + Math.random() * 500);
+        enemyBird.setY( Math.random() * (viewHeight - enemyBird.getFrameHeight()) );
+    }
+
+    // Обработка нажатия
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        int eventAction = event.getAction();
+
+        if (eventAction == MotionEvent.ACTION_DOWN) {
+
+            if (event.getY() < playerBird.getBoundingBoxRect().top) {
+                playerBird.setVelocityY( -Math.abs(playerBird.getVelocityY()) );
+                points--;
+            } else if (event.getY() > playerBird.getBoundingBoxRect().bottom) {
+                playerBird.setVelocityY( Math.abs(playerBird.getVelocityY()) );
+                points--;
+            }
+        }
 
         return super.onTouchEvent(event);
     }
@@ -109,6 +147,9 @@ public class GameView extends View {
     // Метод, вызывабщийся при изменении игрового поля
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        // Запоминание размеров экрана
+        viewWidth = w;
+        viewHeight = h;
     }
 
     class Timer extends CountDownTimer {
@@ -127,6 +168,8 @@ public class GameView extends View {
 
         }
     }
+
+
 }
 
 
