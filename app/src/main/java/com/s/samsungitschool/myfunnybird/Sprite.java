@@ -127,7 +127,6 @@ public class Sprite {
     }
 
     public int getFrameWidth() {
-
         return frameWidth;
     }
 
@@ -163,7 +162,7 @@ public class Sprite {
         return velocityY;
     }
 
-    // Метод, возращающий колличестов кадров
+    // Метод, возвращающий количество  кадров
     public int getFramesCount() {
         return  frames.size();
     }
@@ -171,4 +170,5 @@ public class Sprite {
     public  void addFrame(Rect frame) {
         frames.add(frame);
     }
+
 }

@@ -24,7 +24,6 @@ public class GameView extends View {
     Sprite playerBird;
     Sprite enemyBird;
 
-
     public GameView(Context context) {
         super(context);
 
@@ -87,14 +86,18 @@ public class GameView extends View {
         canvas.drawText(points + "", viewWidth - 100, 70, paint);
 
         // Отрисовка птицы на экране
+
         playerBird.draw(canvas);
         enemyBird.draw(canvas);
 
     }
 
     public void update() {
+
         playerBird.update(timeInterval);
         enemyBird.update(timeInterval);
+
+
         // Метод, который не позволит птице игрока вылететь за пределы экрана
         if (playerBird.getY() + playerBird.getFrameHeight() > viewHeight) {
             playerBird.setVelocityY( -playerBird.getVelocityY() );
@@ -144,14 +147,6 @@ public class GameView extends View {
         return super.onTouchEvent(event);
     }
 
-    // Метод, вызывабщийся при изменении игрового поля
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        // Запоминание размеров экрана
-        viewWidth = w;
-        viewHeight = h;
-    }
-
     class Timer extends CountDownTimer {
 
         public Timer() {
@@ -169,7 +164,15 @@ public class GameView extends View {
         }
     }
 
-
+    // Метод, вызывабщийся при изменении игрового поля
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        // Запоминание размеров экрана
+        viewWidth = w;
+        viewHeight = h;
+    }
 }
+
+
 
 
